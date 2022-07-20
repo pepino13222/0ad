@@ -4,7 +4,7 @@
     <EjectHealth>0.1</EjectHealth>
     <EjectClassesOnDestroy datatype="tokens">Unit</EjectClassesOnDestroy>
     <BuffHeal>0</BuffHeal>
-    <LoadingRange>2</LoadingRange>
+    <LoadingRange>80</LoadingRange>
   </GarrisonHolder>
   <Identity>
     <GenericName>Military Structure</GenericName>

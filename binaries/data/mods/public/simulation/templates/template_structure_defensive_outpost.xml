@@ -7,27 +7,27 @@
     <Territory>own neutral</Territory>
     <Distance>
       <FromClass>Outpost</FromClass>
-      <MinDistance>50</MinDistance>
+      <MinDistance>1</MinDistance>
     </Distance>
   </BuildRestrictions>
   <Cost>
-    <BuildTime>30</BuildTime>
+    <BuildTime>10</BuildTime>
     <Resources>
       <wood>60</wood>
     </Resources>
   </Cost>
   <Footprint>
-    <Square width="7.0" depth="7.0"/>
-    <Height>13.0</Height>
+    <Square width="20.0" depth="20.0"/>
+    <Height>30.0</Height>
   </Footprint>
   <Health>
-    <Max>400</Max>
+    <Max>500</Max>
     <SpawnEntityOnDeath>decay|rubble/rubble_stone_2x2</SpawnEntityOnDeath>
   </Health>
   <Identity>
-    <GenericName>Outpost</GenericName>
+    <GenericName>Amogus Generic Name</GenericName>
     <SelectionGroupName>template_structure_defensive_outpost</SelectionGroupName>
-    <Tooltip>Build in own or neutral territory.</Tooltip>
+    <Tooltip>Amogus tooltip.</Tooltip>
     <VisibleClasses datatype="tokens">Outpost</VisibleClasses>
     <Icon>structures/outpost.png</Icon>
   </Identity>
@@ -35,7 +35,7 @@
     <wood>12</wood>
   </Loot>
   <Obstruction>
-    <Static width="6.0" depth="6.0"/>
+    <Static width="2.0" depth="2.0"/>
   </Obstruction>
   <ProductionQueue/>
   <Researcher>
@@ -46,9 +46,9 @@
   <Resistance>
     <Entity>
       <Damage>
-        <Hack>10</Hack>
-        <Pierce>20</Pierce>
-        <Crush>1</Crush>
+        <Hack>200</Hack>
+        <Pierce>200</Pierce>
+        <Crush>200</Crush>
       </Damage>
     </Entity>
   </Resistance>
@@ -79,4 +79,32 @@
   <VisualActor>
     <FoundationActor>structures/fndn_2x2.xml</FoundationActor>
   </VisualActor>
+  <WarnOutpost>
+  <Detectable>1</Detectable>
+    </WarnOutpost>
+  <Attack>
+    <Ranged>
+      <AttackName>Bow</AttackName>
+      <Damage>
+        <Pierce>0</Pierce>
+      </Damage>
+      <MaxRange>30</MaxRange>
+      <MinRange>1</MinRange>
+      <PrepareTime>1200</PrepareTime>
+      <RepeatTime>2000</RepeatTime>
+      <Projectile>
+        <Speed>100</Speed>
+        <Spread>1.5</Spread>
+        <Gravity>50</Gravity>
+        <FriendlyFire>false</FriendlyFire>
+        <LaunchPoint y="3"/>
+      </Projectile>
+      <PreferredClasses datatype="tokens">Human</PreferredClasses>
+      <RangeOverlay>
+        <LineTexture>outline_border.png</LineTexture>
+        <LineTextureMask>outline_border_mask.png</LineTextureMask>
+        <LineThickness>0.175</LineThickness>
+      </RangeOverlay>
+    </Ranged>
+  </Attack>
 </Entity>

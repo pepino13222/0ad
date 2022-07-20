@@ -56,8 +56,24 @@ Upgrade.prototype.Schema =
 
 Upgrade.prototype.Init = function()
 {
+	this.upgrading = false;
+	this.completed = false;
 	this.elapsedTime = 0;
+	this.timer = undefined;
 	this.expendedResources = {};
+
+	this.upgradeTemplates = {};
+
+	for (let choice in this.template)
+	{
+		let cmpIdentity = Engine.QueryInterface(this.entity, IID_Identity);
+		let name = this.template[choice].Entity;
+		if (cmpIdentity)
+			name = name.replace(/\{civ\}/g, cmpIdentity.GetCiv());
+		if (this.upgradeTemplates.name)
+			warn("Upgrade Component: entity " + this.entity + " has two upgrades to the same entity, only the last will be used.");
+		this.upgradeTemplates[name] = choice;
+	}
 };
 
 // This will also deal with the "OnDestroy" case.
@@ -67,32 +83,7 @@ Upgrade.prototype.OnOwnershipChanged = function(msg)
 		this.CancelUpgrade(msg.from);
 
 	if (msg.to != INVALID_PLAYER)
-	{
 		this.owner = msg.to;
-		this.DetermineUpgrades();
-	}
-};
-
-Upgrade.prototype.DetermineUpgrades = function()
-{
-	this.upgradeTemplates = {};
-
-	for (const choice in this.template)
-	{
-		const nativeCiv = Engine.QueryInterface(this.entity, IID_Identity).GetCiv();
-		const playerCiv = QueryPlayerIDInterface(this.owner, IID_Identity).GetCiv();
-		const name = this.template[choice].Entity.
-			replace(/\{native\}/g, nativeCiv).
-			replace(/\{civ\}/g, playerCiv);
-
-		if (!Engine.QueryInterface(SYSTEM_ENTITY, IID_TemplateManager).TemplateExists(name))
-			continue;
-
-		if (this.upgradeTemplates[name])
-			warn("Upgrade Component: entity " + this.entity + " has two upgrades to the same entity, only the last will be used.");
-
-		this.upgradeTemplates[name] = choice;
-	}
 };
 
 Upgrade.prototype.ChangeUpgradedEntityCount = function(amount)
@@ -137,19 +128,22 @@ Upgrade.prototype.GetUpgrades = function()
 {
 	let ret = [];
 
-	for (const option in this.upgradeTemplates)
+	let cmpIdentity = Engine.QueryInterface(this.entity, IID_Identity);
+
+	for (let option in this.template)
 	{
-		const choice = this.template[this.upgradeTemplates[option]];
+		let choice = this.template[option];
+		let templateName = cmpIdentity ? choice.Entity.replace(/\{civ\}/g, cmpIdentity.GetCiv()) : choice.Entity;
 
 		let cost = {};
 		if (choice.Cost)
-			cost = this.GetResourceCosts(option);
+			cost = this.GetResourceCosts(templateName);
 		if (choice.Time)
-			cost.time = this.GetUpgradeTime(option);
+			cost.time = this.GetUpgradeTime(templateName);
 
 		let hasCost = choice.Cost || choice.Time;
 		ret.push({
-			"entity": option,
+			"entity": templateName,
 			"icon": choice.Icon || undefined,
 			"cost": hasCost ? cost : undefined,
 			"tooltip": choice.Tooltip || undefined,
@@ -167,7 +161,7 @@ Upgrade.prototype.CancelTimer = function()
 
 	let cmpTimer = Engine.QueryInterface(SYSTEM_ENTITY, IID_Timer);
 	cmpTimer.CancelTimer(this.timer);
-	delete this.timer;
+	this.timer = undefined;
 };
 
 Upgrade.prototype.IsUpgrading = function()
@@ -295,7 +289,7 @@ Upgrade.prototype.CancelUpgrade = function(owner)
 			cmpVisual.SelectAnimation("idle", false, 1.0);
 	}
 
-	delete this.upgrading;
+	this.upgrading = false;
 	this.CancelTimer();
 	this.SetElapsedTime(0);
 };

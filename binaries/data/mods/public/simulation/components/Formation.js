@@ -423,7 +423,7 @@ Formation.prototype.RemoveMembers = function(ents, renamed = false)
 };
 
 Formation.prototype.AddMembers = function(ents)
-{
+{	
 	this.offsets = undefined;
 
 	for (let ent of this.formationMembersWithAura)

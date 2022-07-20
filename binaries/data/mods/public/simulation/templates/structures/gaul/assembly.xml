@@ -69,7 +69,7 @@
     </Entities>
   </Trainer>
   <Vision>
-    <Range>40</Range>
+    <Range>80</Range>
   </Vision>
   <VisualActor>
     <Actor>structures/gauls/theater.xml</Actor>

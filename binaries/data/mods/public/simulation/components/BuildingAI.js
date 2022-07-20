@@ -18,7 +18,10 @@ BuildingAI.prototype.Schema =
 	"</element>" +
 	"<element name='GarrisonArrowClasses' a:help='Add extra arrows for this class list'>" +
 		"<text/>" +
-	"</element>";
+	"</element>" +
+"<element name='Detectable'>" +
+"<ref name='nonNegativeDecimal'/>" +
+"</element>";
 
 BuildingAI.prototype.MAX_PREFERENCE_BONUS = 2;
 
@@ -122,7 +125,7 @@ BuildingAI.prototype.SetupRangeQuery = function()
 
 	if (!enemies.length)
 		return;
-
+	
 	const range = cmpAttack.GetRange(attackType);
 	const yOrigin = cmpAttack.GetAttackYOrigin(attackType);
 	// This takes entity sizes into accounts, so no need to compensate for structure size.
@@ -174,6 +177,7 @@ BuildingAI.prototype.OnRangeUpdate = function(msg)
 	if (!cmpAttack)
 		return;
 
+     
 	// Target enemy units except non-dangerous animals.
 	if (msg.tag == this.gaiaUnitsQuery)
 	{
@@ -378,6 +382,7 @@ BuildingAI.prototype.CheckTargetVisible = function(target)
 
 	// Either visible directly, or visible in fog.
 	let cmpRangeManager = Engine.QueryInterface(SYSTEM_ENTITY, IID_RangeManager);
+	
 	return cmpRangeManager.GetLosVisibility(target, cmpOwnership.GetOwner()) != "hidden";
 };
 

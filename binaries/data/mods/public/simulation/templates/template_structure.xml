@@ -158,7 +158,7 @@
     <Preview>false</Preview>
   </Visibility>
   <Vision>
-    <Range>4</Range>
+    <Range>60</Range>
   </Vision>
   <VisionSharing>
     <Bribable>false</Bribable>

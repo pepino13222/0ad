@@ -6,7 +6,7 @@
       <Damage>
         <Pierce>11</Pierce>
       </Damage>
-      <MaxRange>60</MaxRange>
+      <MaxRange>30</MaxRange>
       <MinRange>10</MinRange>
       <PrepareTime>1200</PrepareTime>
       <RepeatTime>2000</RepeatTime>
@@ -34,7 +34,7 @@
     <Category>Tower</Category>
     <Distance>
       <FromClass>Tower</FromClass>
-      <MinDistance>60</MinDistance>
+      <MinDistance>30</MinDistance>
     </Distance>
   </BuildRestrictions>
   <GarrisonHolder>
@@ -69,4 +69,5 @@
   <VisualActor>
     <FoundationActor>structures/fndn_3x3.xml</FoundationActor>
   </VisualActor>
+ 
 </Entity>

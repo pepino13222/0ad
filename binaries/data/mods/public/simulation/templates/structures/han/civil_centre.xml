@@ -23,13 +23,13 @@
   <Trainer>
     <Entities datatype="tokens">
       units/{civ}/infantry_spearman_b
-      units/{civ}/infantry_crossbowman_b
+      units/{civ}/infantry_archer_b
       units/{civ}/cavalry_swordsman_b
     </Entities>
   </Trainer>
   <Upgrade>
     <ImperialCourt>
-      <Entity>structures/{civ}/civil_centre_court</Entity>
+      <Entity>structures/han/civil_centre_court</Entity>
       <Tooltip>This greatly increases the health, capture resistance, and garrison capacity of this specific Civic Center. Unlock training of Heroes here and reduce its research and batch training times by half.</Tooltip>
       <RequiredTechnology>phase_city</RequiredTechnology>
       <Cost>
