@@ -42,7 +42,7 @@ public:
 	{
 		SetState(&Waiting);
 
-		m_EyedropperBrush.SetSquare(2);
+		m_EyedropperBrush.SetSquare(16);
 	}
 
 

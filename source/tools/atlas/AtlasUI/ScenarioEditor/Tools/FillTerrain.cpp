@@ -35,7 +35,7 @@ class FillTerrain : public StateDrivenTool<FillTerrain>
 public:
 	FillTerrain()
 	{
-		m_Brush.SetSquare(2);
+		m_Brush.SetSquare(16);
 		SetState(&Waiting);
 	}
 

@@ -539,6 +539,10 @@ COMMAND(AlterElevation, MERGE,
 		((Position, pos))
 		((float, amount))
 		);
+COMMAND(DisplacementMap, MERGE,
+	((Position, pos))
+	((float, amount))
+);
 
 COMMAND(SmoothElevation, MERGE,
 		((Position, pos))

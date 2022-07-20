@@ -35,7 +35,7 @@ class ReplaceTerrain : public StateDrivenTool<ReplaceTerrain>
 public:
 	ReplaceTerrain()
 	{
-		m_Brush.SetSquare(2);
+		m_Brush.SetSquare(16);
 		SetState(&Waiting);
 	}
 
