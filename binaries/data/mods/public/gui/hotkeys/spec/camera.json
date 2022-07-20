@@ -138,6 +138,14 @@
 			"camera.jump.set.4": {
 				"name": "Set camera jump 4",
 				"desc": "Set camera jump position 4."
+			},
+			"camera.fov.increase": {
+				"name": "Increase camera FOV",
+				"desc": "Increase camera FOV by 0.1 rad"
+			},
+			"camera.fov.decrease": {
+				"name": "Decrease camera FOV",
+				"desc": "Decrease camera FOV by 0.1 rad"
 			}
 		}
 	}
