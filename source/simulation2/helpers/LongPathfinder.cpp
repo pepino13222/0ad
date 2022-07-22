@@ -1,4 +1,4 @@
-/* Copyright (C) 2021 Wildfire Games.
+	/* Copyright (C) 2021 Wildfire Games.
  * This file is part of 0 A.D.
  *
  * 0 A.D. is free software: you can redistribute it and/or modify
@@ -397,7 +397,7 @@ PathCost LongPathfinder::CalculateHeuristic(int i, int j, int iGoal, int jGoal) 
 }
 
 // Do the A* processing for a neighbour tile i,j.
-void LongPathfinder::ProcessNeighbour(int pi, int pj, int i, int j, PathCost pg, PathfinderState& state) const
+void LongPathfinder::ProcessNeighbour(const int pi,const int pj,const int i, const int j, PathCost pg, PathfinderState& state) const
 {
 	// Reject impassable tiles
 	if (!PASSABLE(i, j))
@@ -408,7 +408,7 @@ void LongPathfinder::ProcessNeighbour(int pi, int pj, int i, int j, PathCost pg,
 	if (n.IsClosed())
 		return;
 
-	PathCost dg;
+	 PathCost dg;
 	if (pi == i)
 		dg = PathCost::horizvert(abs(pj - j));
 	else if (pj == j)
@@ -419,9 +419,9 @@ void LongPathfinder::ProcessNeighbour(int pi, int pj, int i, int j, PathCost pg,
 		dg = PathCost::diag(abs((int)pi - (int)i));
 	}
 
-	PathCost g = pg + dg; // cost to this tile = cost to predecessor + delta from predecessor
+	const PathCost g = pg + dg; // cost to this tile = cost to predecessor + delta from predecessor
 
-	PathCost h = CalculateHeuristic(i, j, state.iGoal, state.jGoal);
+	const PathCost h = CalculateHeuristic(i, j, state.iGoal, state.jGoal);
 
 	// If this is a new tile, compute the heuristic distance
 	if (n.IsUnexplored())
@@ -543,7 +543,7 @@ void LongPathfinder::AddJumpedHoriz(int i, int j, int di, PathCost g, Pathfinder
 }
 
 // Returns the i-coordinate of the jump point if it exists, else returns i
-int LongPathfinder::HasJumpedHoriz(int i, int j, int di, PathfinderState& state, bool detectGoal) const
+int LongPathfinder::HasJumpedHoriz(int i, int j, int di, PathfinderState& state,const bool detectGoal) const
 {
 	if (m_UseJPSCache)
 	{
@@ -579,7 +579,7 @@ int LongPathfinder::HasJumpedHoriz(int i, int j, int di, PathfinderState& state,
 	}
 }
 
-void LongPathfinder::AddJumpedVert(int i, int j, int dj, PathCost g, PathfinderState& state, bool detectGoal) const
+void LongPathfinder::AddJumpedVert(int i, int j, int dj, PathCost g, PathfinderState& state,const  bool detectGoal) const
 {
 	if (m_UseJPSCache)
 	{
@@ -665,13 +665,15 @@ void LongPathfinder::AddJumpedDiag(int i, int j, int di, int dj, PathCost g, Pat
 {
 	// 	ProcessNeighbour(i, j, i + di, j + dj, g, state);
 	// 	return;
-
+	
 	ASSERT(di == 1 || di == -1);
 	ASSERT(dj == 1 || dj == -1);
 
 	int ni = i + di;
 	int nj = j + dj;
-	bool detectGoal = OnTheWay(i, j, di, dj, state.iGoal, state.jGoal);
+	const auto iGoal = state.iGoal;
+	const auto jGoal = state.jGoal;
+	const bool detectGoal = OnTheWay(i, j, di, dj, iGoal, jGoal);
 	while (true)
 	{
 		// Stop if we hit an obstructed cell
@@ -690,9 +692,10 @@ void LongPathfinder::AddJumpedDiag(int i, int j, int di, int dj, PathCost g, Pat
 			ProcessNeighbour(i, j, ni, nj, g, state);
 			return;
 		}
-
-		int fi = HasJumpedHoriz(ni, nj, di, state, detectGoal && OnTheWay(ni, nj, di, 0, state.iGoal, state.jGoal));
-		int fj = HasJumpedVert(ni, nj, dj, state, detectGoal && OnTheWay(ni, nj, 0, dj, state.iGoal, state.jGoal));
+		const bool goalI = OnTheWay(ni, nj, di, 0, iGoal, jGoal);
+		const bool goalJ = OnTheWay(ni, nj, 0, dj, iGoal, jGoal);
+		const int fi = HasJumpedHoriz(ni, nj, di, state, detectGoal && goalI);
+		const int fj = HasJumpedVert(ni, nj, dj, state, detectGoal && goalJ);
 		if (fi != ni || fj != nj)
 		{
 			ProcessNeighbour(i, j, ni, nj, g, state);
@@ -710,10 +713,12 @@ void LongPathfinder::AddJumpedDiag(int i, int j, int di, int dj, PathCost g, Pat
 		ni += di;
 		nj += dj;
 	}
+	
 }
 
 void LongPathfinder::ComputeJPSPath(const HierarchicalPathfinder& hierPath, entity_pos_t x0, entity_pos_t z0, const PathGoal& origGoal, pass_class_t passClass, WaypointPath& path) const
 {
+	TIMER_BEGIN(L"AddJumpedDiag");
 	PROFILE2("ComputePathJPS");
 	PathfinderState state = { 0 };
 
@@ -915,6 +920,7 @@ void LongPathfinder::ComputeJPSPath(const HierarchicalPathfinder& hierPath, enti
 	}
 	else
 		SAFE_DELETE(state.tiles);
+	TIMER_END(L"Compute JSP");		
 }
 
 #undef PASSABLE
@@ -969,6 +975,7 @@ void LongPathfinder::ImprovePathWaypoints(WaypointPath& path, pass_class_t passC
 	}
 	newWaypoints.push_back(waypoints.back());
 	path.m_Waypoints.swap(newWaypoints);
+	
 }
 
 void LongPathfinder::GetDebugDataJPS(u32& steps, double& time, Grid<u8>& grid) const
