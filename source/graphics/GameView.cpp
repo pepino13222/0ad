@@ -316,9 +316,9 @@ float CGameView::GetCameraZoom() const
 	return m->CameraController->GetCameraZoom();
 }
 
-void CGameView::SetCamera(const CVector3D& pos, float rotX, float rotY, float zoom)
+void CGameView::SetCamera(const CVector3D& pos, float rotX, float rotY, float zoom, float fov)
 {
-	m->CameraController->SetCamera(pos, rotX, rotY, zoom);
+	m->CameraController->SetCamera(pos, rotX, rotY, zoom, fov);
 }
 
 void CGameView::MoveCameraTarget(const CVector3D& target)

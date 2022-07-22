@@ -114,14 +114,22 @@ void SetCameraTarget(float x, float y, float z)
 /**
  * Set the data (position, orientation and zoom) of the camera.
  */
-void SetCameraData(entity_pos_t x, entity_pos_t y, entity_pos_t z, entity_pos_t rotx, entity_pos_t roty, entity_pos_t zoom)
+void SetCameraData(entity_pos_t x, entity_pos_t y, entity_pos_t z, entity_pos_t rotx, entity_pos_t roty, entity_pos_t zoom, float fov)
 {
 	if (!g_Game || !g_Game->GetView())
 		return;
 
 	CVector3D pos(x.ToFloat(), y.ToFloat(), z.ToFloat());
 
-	g_Game->GetView()->SetCamera(pos, rotx.ToFloat(), roty.ToFloat(), zoom.ToFloat());
+	g_Game->GetView()->SetCamera(pos, rotx.ToFloat(), roty.ToFloat(), zoom.ToFloat(), fov);
+}
+
+JS::Value GetCameraData(const ScriptRequest& rq)
+{
+	JS::RootedValue data(rq.cx);
+	Script::CreateObject(rq, &data,"x", g_Game->GetView()->GetCameraPosition().X,"y", g_Game->GetView()->GetCameraPosition().Y, "z", g_Game->GetView()->GetCameraPosition().Z,
+		"zoom", g_Game->GetView()->GetCameraZoom(), "rotX", g_Game->GetView()->GetCameraRotation().X, "rotY", g_Game->GetView()->GetCameraRotation().Y, "fov", g_Game->GetView()->GetCamera()->GetFOV());
+	return data;
 }
 
 /**
@@ -174,5 +182,6 @@ void RegisterScriptFunctions(const ScriptRequest& rq)
 	ScriptFunction::Register<&CameraFollowFPS>(rq, "CameraFollowFPS");
 	ScriptFunction::Register<&GetFollowedEntity>(rq, "GetFollowedEntity");
 	ScriptFunction::Register<&GetTerrainAtScreenPoint>(rq, "GetTerrainAtScreenPoint");
+	ScriptFunction::Register<&GetCameraData>(rq, "GetCameraData");
 }
 }

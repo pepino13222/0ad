@@ -429,7 +429,7 @@ float CCameraController::GetCameraZoom() const
 	return m_Zoom.GetValue();
 }
 
-void CCameraController::SetCamera(const CVector3D& pos, float rotX, float rotY, float zoom)
+void CCameraController::SetCamera(const CVector3D& pos, float rotX, float rotY, float zoom, float fov)
 {
 	m_PosX.SetValue(pos.X);
 	m_PosY.SetValue(pos.Y);
@@ -437,7 +437,7 @@ void CCameraController::SetCamera(const CVector3D& pos, float rotX, float rotY, 
 	m_RotateX.SetValue(rotX);
 	m_RotateY.SetValue(rotY);
 	m_Zoom.SetValue(zoom);
-
+	m_ViewFOV = fov;
 	FocusHeight(false);
 
 	SetupCameraMatrixNonSmooth(&m_Camera.m_Orientation);

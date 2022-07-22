@@ -247,23 +247,25 @@ function jumpCamera(index)
 		return;
 
 	let threshold = Engine.ConfigDB_GetValue("user", "gui.session.camerajump.threshold");
-	let cameraPivot = Engine.GetCameraPivot();
+	let cameraPosition = Engine.GetCameraData();
 	if (g_JumpCameraLast &&
-	    Math.abs(cameraPivot.x - position.x) < threshold &&
-	    Math.abs(cameraPivot.z - position.z) < threshold)
+		Math.abs(cameraPosition.x - position.x) < threshold &&
+	    Math.abs(cameraPosition.z - position.z) < threshold)
 	{
-		Engine.CameraMoveTo(g_JumpCameraLast.x, g_JumpCameraLast.z);
+		//Engine.CameraMoveTo(g_JumpCameraLast.x, g_JumpCameraLast.z);
+		Engine.SetCameraData(g_JumpCameraLast.x, g_JumpCameraLast.y, g_JumpCameraLast.z, g_JumpCameraLast.rotX, g_JumpCameraLast.rotY, g_JumpCameraLast.zoom, g_JumpCameraLast.fov);
 	}
 	else
 	{
-		g_JumpCameraLast = cameraPivot;
-		Engine.CameraMoveTo(position.x, position.z);
+		g_JumpCameraLast = cameraPosition;
+	//	Engine.CameraMoveTo(position.x, position.z);
+		Engine.SetCameraData(position.x, position.y, position.z, position.rotX, position.rotY, position.zoom, position.fov);
 	}
 }
 
 function setJumpCamera(index)
 {
-	g_JumpCameraPositions[index] = Engine.GetCameraPivot();
+	g_JumpCameraPositions[index] = Engine.GetCameraData();
 }
 
 /**
